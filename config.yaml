@@ -1,0 +1,73 @@
+---
+# Global configuration file for gpio devices
+#
+# Pi Model 3B v1.2 pinout
+#   3V3  (1) (2)  5V
+# GPIO2  (3) (4)  5V
+# GPIO3  (5) (6)  GND
+# GPIO4  (7) (8)  GPIO14
+#   GND  (9) (10) GPIO15
+#GPIO17 (11) (12) GPIO18
+#GPIO27 (13) (14) GND
+#GPIO22 (15) (16) GPIO23
+#   3V3 (17) (18) GPIO24
+#GPIO10 (19) (20) GND
+# GPIO9 (21) (22) GPIO25
+#GPIO11 (23) (24) GPIO8
+#   GND (25) (26) GPIO7
+# GPIO0 (27) (28) GPIO1
+# GPIO5 (29) (30) GND
+# GPIO6 (31) (32) GPIO12
+#GPIO13 (33) (34) GND
+#GPIO19 (35) (36) GPIO16
+#GPIO26 (37) (38) GPIO20
+#   GND (39) (40) GPIO21
+
+devices:
+  input:
+    digital:  
+      - name: "Burn wire"
+        description: |
+          The burn wire is a redundant hardware connection that fails open
+          to confirm that an igniter charge has successfully detonated. 
+        id: "BNW" 
+        pin: 16
+        pull-up: true
+        initial: "low"
+
+    i2c:
+      - name: "Pressure sensor 1"
+        description: |
+          An ADC (ADS1115) that measures pressure (psi) in main motor chamber.
+        id: "PS1"
+        addr: 0x48 
+        channel: 1
+        # Future: add additional config settings for ads1115 chip
+
+  output:
+    digital:
+      - name: "Igniter"
+        description: |
+          The igniter connection flips a relay to expose an explosive charge 
+          embedded in the rocket motor to a high voltage, leading to detonation
+          and burning through the burn wire in a successful attempt. 
+        id: "IGN" 
+        pin: 18
+        initial: "low"
+
+      - name: "Main ox valve"
+        description: |
+          The main (ox)idizer valve controls the flow of nitrous oxide through 
+          the rocket motor that then mixes with the solid propellant in a hybrid
+          rocket.
+        id: "VL1"
+        pin: 12
+        initial: "low"
+
+      - name: "Deluge pump"
+        description: |
+          Connection to a high-voltage contactor that switches 120VAC to enable/
+          disable deluge pump during hot rocket ignition.
+        id: "DLG"
+        pin: 14
+        initial: "low"
