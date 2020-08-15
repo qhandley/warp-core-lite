@@ -5,7 +5,7 @@ import argparse
 import gpiozero
 
 import pyfiglet
-from prompt_toolkit import prompt
+from prompt_toolkit import PromptSession
 from prompt_toolkit.shortcuts import confirm
 
 import devices
@@ -36,6 +36,39 @@ def parse_args():
     
     return parser.parse_args()
 
+def run_prompt():
+    session = PromptSession()
+
+    while True:
+        try:
+            response = session.prompt('> ')
+        except KeyboardInterrupt:
+            continue
+        except EOFError:
+            break
+        else:
+            tokens = response.split()
+
+            if tokens[0] == 'help':
+                print('Print out commands and options.')
+
+            elif tokens[0] == 'list':
+                print('Pretty print configured devices and their current state.')
+
+            elif tokens[0] == 'toggle':
+                print('Toggle configured output devices.')
+
+            elif tokens[0] == 'launch':
+                if(confirm('Confirm launch initiation.')):
+                    print('Starting launch sequence...')
+                else:
+                    print('Cancelling launch sequence...')
+
+            else:
+                print('Invalid response: {}'.format(response))
+
+    print('Ending session...')
+
 def run():
     print(BANNER)
     print('Version ' + VERSION)
@@ -51,26 +84,7 @@ def run():
     print(bcolors.OKBLUE + 'Loading configuration file ' + config_path + '...' + bcolors.ENDC)
 
     rocket = devices.configure(config_path)
-
-    print('Loaded device IDs:') 
-    for device_id, device_obj in rocket.items():
-        print(device_id) 
-        print(device_obj)
-
-    print('Burn Wire status:')
-    print(rocket['BNW'].is_active)
-
-'''
-    answer = prompt('> ')
-    if answer == 'launch':
-        if(confirm('Confirm launch initiation. (y/n)')):
-            print('Weeeee!!')
-        else:
-            print('Loser')
-    else:
-        print('You said: %s' % answer)
-    
-'''
+    run_prompt()
 
 if __name__ == "__main__":
     run()
