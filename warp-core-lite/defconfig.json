@@ -1,0 +1,59 @@
+{
+    "io_device_list": [
+        {
+            "name": "BurnWire",
+            "id": 10,
+            "info": "",
+            "io_type": "DIN",
+            "config": {
+                "pin": 16,
+                "pull_up": false,
+                "active_state": "high"
+            }
+        },
+        {
+            "name": "IgniterCharge",
+            "id": 1,
+            "info": "",
+            "io_type": "DOUT",
+            "config": {
+                "pin": 16,
+                "active_high": true,
+                "initial_value": "low"
+            }
+        },
+        {
+            "name": "DelugePump",
+            "id": 5,
+            "info": "",
+            "io_type": "DOUT",
+            "config": {
+                "pin": 16,
+                "active_high": true,
+                "initial_value": "low"
+            }
+        },
+        {
+            "name": "MainOxValve",
+            "id": 0,
+            "info": "",
+            "io_type": "DOUT",
+            "config": {
+                "pin": 16,
+                "active_high": true,
+                "initial_value": "low"
+            }
+        },
+        {
+            "name": "MotorPressure",
+            "id": 5,
+            "info": "",
+            "io_type": "I2C",
+            "config": {
+                "address": "0x48",
+                "channel": 1,
+                "differential": true
+            }
+        }
+    ]
+}
