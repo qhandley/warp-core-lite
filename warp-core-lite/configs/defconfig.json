@@ -1,9 +1,9 @@
 {
     "io_device_list": [
         {
-            "name": "BurnWire",
+            "name": "BRN",
             "id": 0,
-            "info": "",
+            "info": "Burn wire",
             "type": "DIN",
             "config": {
                 "pin": 16,
@@ -12,9 +12,9 @@
             }
         },
         {
-            "name": "Igniter",
+            "name": "IGN",
             "id": 1,
-            "info": "",
+            "info": "Igniter charge",
             "type": "DOUT",
             "config": {
                 "pin": 16,
@@ -23,9 +23,9 @@
             }
         },
         {
-            "name": "DelugePump",
+            "name": "DLG",
             "id": 2,
-            "info": "",
+            "info": "Deluge pump",
             "type": "DOUT",
             "config": {
                 "pin": 16,
@@ -34,9 +34,9 @@
             }
         },
         {
-            "name": "MainOxValve",
+            "name": "VLV1",
             "id": 3,
-            "info": "",
+            "info": "Main motor oxidizer valve",
             "type": "DOUT",
             "config": {
                 "pin": 16,
@@ -45,9 +45,9 @@
             }
         },
         {
-            "name": "MainMotorPressureSensor",
+            "name": "P1",
             "id": 4,
-            "info": "",
+            "info": "Motor chamber pressure sensor",
             "type": "I2C",
             "config": {
                 "address": "0x48",
