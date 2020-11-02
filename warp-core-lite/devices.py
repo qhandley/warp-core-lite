@@ -1,94 +1,90 @@
-from interface import implements, Interface
-from gpiozero import (
-        DigitalInputDevice, 
-        DigitalOutputDevice,
-        )
+from gpiozero import DigitalInputDevice, DigitalOutputDevice
 from smbus2 import SMBus
 
-class DeviceInterface(Interface):
+def dout_init(config):
+    pin = config['pin']
+    active_high = config['active_high']
+    initial_value = config['initial_value']
+    return DigitalOutputDevice(pin, active_high, initial_value)
+
+
+def din_init(config):
+    pin = config['pin']
+    pull_up = config['pull_up']
+    return DigitalInputDevice(pin, pull_up)
+
+
+def i2c_init(config):
+    channel = config['channel']
+    return SMBus(channel)
+
+
+class BurnWire():
+    def __init__(self, config, core_init):
+        self.core = core_init(config)
+
     def read(self):
         pass
 
     def write(self, value=None):
         pass
 
-
-class BurnWire(implements(DeviceInterface)):
-    def __init__(self, name, id_, info, type_, config=None):
-        self.name = name
-        self.id = id_
-        self.info = info
-        self.type = type_
-
-    def read(self):
-        pass
-
-    def write(self, value=None):
-        pass
+    def __repr__(self):
+        return f"<devices.{self.__class__.__name__} object>"
     
 
-class Igniter(implements(DeviceInterface)):
-    def __init__(self, name, id_, info, type_, config=None):
-        self.name = name
-        self.id = id_
-        self.info = info
-        self.type = type_
+class Igniter():
+    def __init__(self, config, core_init):
+        self.core = core_init(config)
 
     def read(self):
         pass
 
     def write(self, value=None):
         pass
-
-
-class DelugePump(implements(DeviceInterface)):
-    def __init__(self, name, id_, info, type_, config=None):
-        self.name = name
-        self.id = id_
-        self.info = info
-        self.type = type_
-
-    def read(self):
-        pass
-
-    def write(self, value=None):
-        pass
-
-
-class MainOxValve(implements(DeviceInterface)):
-    def __init__(self, name, id_, info, type_, config=None):
-        self.name = name
-        self.id = id_
-        self.info = info
-        self.type = type_
-        if config:
-            dev_pin = config.get('pin')
-            dev_active_high = config.get('active_high')
-            dev_initial_value = config.get('initial_value')
-            self.core = DigitalOutputDevice(dev_pin, dev_active_high, dev_initial_value)
-
-    def read(self):
-        return self.core.value()
-
-    def write(self, value=None):
-        if value == 'open':
-            self.core.on()
-        elif value == 'close':
-            self.core.off()
 
     def __repr__(self):
         return f"<devices.{self.__class__.__name__} object>"
 
 
-class MotorPressure(implements(DeviceInterface)):
-    def __init__(self, name, id_, info, type_, config=None):
-        self.name = name
-        self.id = id_
-        self.info = info
-        self.type = type_
+class DelugePump():
+    def __init__(self, config, core_init):
+        self.core = core_init(config)
 
     def read(self):
         pass
 
     def write(self, value=None):
         pass
+
+    def __repr__(self):
+        return f"<devices.{self.__class__.__name__} object>"
+
+
+class MainOxValve():
+    def __init__(self, config, core_init):
+        self.core = core_init(config)
+
+    def read(self):
+        return self.core.value()
+
+    def write(self, value=None):
+        pass
+
+    def __repr__(self):
+        return f"<devices.{self.__class__.__name__} object>"
+
+
+class MotorPressure():
+    def __init__(self, config, core_init):
+        self.addr = config['address']
+        self.core = core_init(config)
+
+    def read(self):
+        pass
+
+    def write(self, value=None):
+        pass
+
+    def __repr__(self):
+        return f"<devices.{self.__class__.__name__} object>"

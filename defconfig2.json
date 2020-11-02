@@ -1,14 +1,13 @@
 {
-    "io_device_list": [
+    "DeviceList": [
         {
             "name": "BRN",
             "id": 0,
             "info": "Burn wire",
             "type": "DIN",
             "config": {
-                "pin": 16,
-                "pull_up": false,
-                "active_state": "high"
+                "pin": 21,
+                "pull_up": false
             }
         },
         {
@@ -17,7 +16,7 @@
             "info": "Igniter charge",
             "type": "DOUT",
             "config": {
-                "pin": 16,
+                "pin": 22,
                 "active_high": true,
                 "initial_value": false
             }
@@ -28,7 +27,7 @@
             "info": "Deluge pump",
             "type": "DOUT",
             "config": {
-                "pin": 16,
+                "pin": 23,
                 "active_high": true,
                 "initial_value": false 
             }
@@ -39,7 +38,7 @@
             "info": "Main motor oxidizer valve",
             "type": "DOUT",
             "config": {
-                "pin": 16,
+                "pin": 24,
                 "active_high": true,
                 "initial_value": false
             }
@@ -50,9 +49,8 @@
             "info": "Motor chamber pressure sensor",
             "type": "I2C",
             "config": {
-                "address": "0x48",
                 "channel": 1,
-                "differential": true
+                "address": "0x48"
             }
         }
     ]
