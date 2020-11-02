@@ -6,9 +6,9 @@ import sys
 
 import bcolors as b
 from prompt_toolkit import PromptSession
-from prompt_toolkit.shortcuts import confirm
 import pyfiglet
 
+import commands
 from factory import DeviceFactory
 
 _BANNER = pyfiglet.figlet_format('Warp-Core Lite', font = 'slant') 
@@ -49,23 +49,21 @@ def run_interactive(launch_id):
     '''
 
     parser = argparse.ArgumentParser(prog='')
-    subparsers = parser.add_subparsers(help='sub-command help', dest='sub_cmd')
+    subparsers = parser.add_subparsers(help='sub-command help', dest='cmd')
 
-    open_parser = subparsers.add_parser('open', help='open valve')
-    open_parser.add_argument('device', choices=['VLV1', 'VLV2'], 
-            help='Select a device to open')
-    open_parser.set_defaults(func=commands.warp_open)
+    read_parser = subparsers.add_parser('read', help='read from device')
+    read_parser.add_argument('device', choices=devices.keys(), help='Choose a device to read to')
+    read_parser.add_argument('payload', nargs='?')
 
-    close_parser = subparsers.add_parser('close', help='close valve')
-    close_parser.add_argument('device', choices=['VLV1', 'VLV2'],
-            help='Select a device to close')
-    close_parser.set_defaults(func=commands.warp_close)
+    write_parser = subparsers.add_parser('write', help='write to device')
+    write_parser.add_argument('device', choices=devices.keys(), help='Choose a device to write to')
+    write_parser.add_argument('payload')
 
     status_parser = subparsers.add_parser('status', help='print status information')
-    status_parser.set_defaults(func=commands.warp_status)
+    status_parser.set_defaults(func=commands.status)
 
-    launch_parser = subparsers.add_parser('launch', help='commence launch (with confirmation)')
-    launch_parser.set_defaults(func=commands.warp_launch)
+    launch_parser = subparsers.add_parser('launch', help='initiate launch sequence')
+    launch_parser.set_defaults(func=commands.launch)
 
     session = PromptSession()
     prompt = f"({launch_id})> "
@@ -86,16 +84,20 @@ def run_interactive(launch_id):
             continue
 
         try: 
-            args.func(args, devices)
+            if args.cmd in ['read', 'write']:
+                devices[args.device].access(args.cmd, args.payload)
+            else:
+                args.func()
         except:
             print('function does not exist')
 
-    print('Ending session...')
+    print('Ending session... goodbye!')
 
 
 def run():
     '''Run program either in interactive mode (default) or as server.'''
 
+    global devices
     args = parse_args()
 
     if args.disable_logging:
@@ -105,7 +107,7 @@ def run():
     if args.launch_id:
         launch_id = args.launch_id
     else:
-        launch_id = 0x0
+        launch_id = "TEST"
 
     if args.config_file:
         config_path = args.config_file

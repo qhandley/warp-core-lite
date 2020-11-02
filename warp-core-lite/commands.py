@@ -1,27 +1,16 @@
-def warp_open(args, devices):
-    ''' '''
-    if args.device == 'VLV1':
-        print(f"Opening VLV1")
-        vlv1 = devices.get('VLV1')
-        vlv1.write('open')
+from prompt_toolkit.shortcuts import confirm
 
-    if args.device == 'VLV2':
-        print(f"Opening VLV2")
+def status():
+    '''Print status information.'''
 
+    print("Temp status")
+    #TODO
 
-def warp_close(args, devices):
-    ''' '''
-    pass
+def launch():
+    '''Initiate launch sequence.'''
 
-
-def warp_status(args, devices):
-    ''' '''
-    pass
-
-
-def warp_launch(args, devices):
-    ''' '''
-    if(confirm('Confirm launch initiation.')):
+    if(confirm('Confirm launch sequence.')):
         print('Launching...')
     else:
         print('Launch aborted.')
+    #TODO

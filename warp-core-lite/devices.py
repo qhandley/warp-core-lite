@@ -23,6 +23,10 @@ class BurnWire():
     def __init__(self, config, core_init):
         self.core = core_init(config)
 
+    def access(self, command, payload=None):
+        pass
+        #TODO
+
     def read(self):
         pass
 
@@ -36,6 +40,10 @@ class BurnWire():
 class Igniter():
     def __init__(self, config, core_init):
         self.core = core_init(config)
+
+    def access(self, command, payload=None):
+        pass
+        #TODO
 
     def read(self):
         pass
@@ -51,6 +59,10 @@ class DelugePump():
     def __init__(self, config, core_init):
         self.core = core_init(config)
 
+    def access(self, command, payload=None):
+        pass
+        #TODO
+
     def read(self):
         pass
 
@@ -64,6 +76,10 @@ class DelugePump():
 class MainOxValve():
     def __init__(self, config, core_init):
         self.core = core_init(config)
+
+    def access(self, command, payload=None):
+        pass
+        #TODO
 
     def read(self):
         return self.core.value()
@@ -79,6 +95,10 @@ class MotorPressure():
     def __init__(self, config, core_init):
         self.addr = config['address']
         self.core = core_init(config)
+
+    def access(self, command, payload=None):
+        pass
+        #TODO
 
     def read(self):
         pass
