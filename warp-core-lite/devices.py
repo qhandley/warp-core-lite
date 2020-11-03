@@ -1,110 +1,101 @@
 from gpiozero import DigitalInputDevice, DigitalOutputDevice
 from smbus2 import SMBus
 
-def dout_init(config):
-    pin = config['pin']
-    active_high = config['active_high']
-    initial_value = config['initial_value']
-    return DigitalOutputDevice(pin, active_high, initial_value)
+enable_keywords = ('enable', 'on', '1', 'high')
+disable_keywords = ('disable', 'off', '0', 'off')
 
+class DigitalOutputDriver(object):
+    def __init__(self, config):
+        self.core = self.dout_init(config)
 
-def din_init(config):
-    pin = config['pin']
-    pull_up = config['pull_up']
-    return DigitalInputDevice(pin, pull_up)
-
-
-def i2c_init(config):
-    channel = config['channel']
-    return SMBus(channel)
-
-
-class BurnWire():
-    def __init__(self, config, core_init):
-        self.core = core_init(config)
+    def dout_init(self, config):
+        pin = config['pin']
+        active_high = config['active_high']
+        initial_value = config['initial_value']
+        return DigitalOutputDevice(pin, active_high, initial_value)
 
     def access(self, command, payload=None):
-        pass
-        #TODO
+        if command == 'read':
+            return self._read()
+        elif command == 'write':
+            return self._write(payload)
+        else:
+            return None
 
-    def read(self):
-        pass
+    def _read(self):
+        return self.core.value
 
-    def write(self, value=None):
-        pass
-
-    def __repr__(self):
-        return f"<devices.{self.__class__.__name__} object>"
-    
-
-class Igniter():
-    def __init__(self, config, core_init):
-        self.core = core_init(config)
-
-    def access(self, command, payload=None):
-        pass
-        #TODO
-
-    def read(self):
-        pass
-
-    def write(self, value=None):
-        pass
+    def _write(self, value=None):
+        if value in enable_keywords:
+            self.core.on()
+        elif value in disable_keywords:
+            self.core.off()
+        return value
 
     def __repr__(self):
         return f"<devices.{self.__class__.__name__} object>"
 
 
-class DelugePump():
-    def __init__(self, config, core_init):
-        self.core = core_init(config)
+class DigitalInputDriver(object):
+    def __init__(self, config):
+        self.core = self.din_init(config)
+
+    def din_init(self, config):
+        pin = config['pin']
+        pull_up = config['pull_up']
+        return DigitalInputDevice(pin, pull_up)
 
     def access(self, command, payload=None):
-        pass
-        #TODO
+        if command == 'read':
+            return self._read()
+        else:
+            return None
 
-    def read(self):
-        pass
-
-    def write(self, value=None):
-        pass
+    def _read(self):
+        return self.core.value
 
     def __repr__(self):
         return f"<devices.{self.__class__.__name__} object>"
 
 
-class MainOxValve():
-    def __init__(self, config, core_init):
-        self.core = core_init(config)
+class I2CDriver(object):
+    def __init__(self, config):
+        self.core = self.i2c_init(config)
+
+    def i2c_init(self, config):
+        channel = config['channel']
+        return SMBus(channel)
 
     def access(self, command, payload=None):
         pass
-        #TODO
 
-    def read(self):
-        return self.core.value()
+    def _read(self):
+        pass 
 
-    def write(self, value=None):
+    def _write(self, value=None):
         pass
 
     def __repr__(self):
         return f"<devices.{self.__class__.__name__} object>"
 
 
-class MotorPressure():
-    def __init__(self, config, core_init):
+class BurnWire(DigitalInputDriver):
+    pass
+
+
+class Igniter(DigitalOutputDriver):
+    pass
+
+
+class DelugePump(DigitalOutputDriver):
+    pass
+
+
+class MainOxValve(DigitalOutputDriver):
+    pass
+
+
+class MotorPressure(I2CDriver):
+    def __init__(self, config):
         self.addr = config['address']
-        self.core = core_init(config)
-
-    def access(self, command, payload=None):
-        pass
-        #TODO
-
-    def read(self):
-        pass
-
-    def write(self, value=None):
-        pass
-
-    def __repr__(self):
-        return f"<devices.{self.__class__.__name__} object>"
+        super().__init__(config)

@@ -10,11 +10,6 @@ from devices import (
     MainOxValve, 
     MotorPressure
     )
-from devices import (
-    dout_init, 
-    din_init, 
-    i2c_init
-    )
 
 class_helpers = {
     'BRN': BurnWire,
@@ -22,12 +17,6 @@ class_helpers = {
     'DLG': DelugePump,
     'VLV1': MainOxValve,
     'P1': MotorPressure,
-    }
-
-io_helpers = {
-    'DOUT': dout_init, 
-    'DIN': din_init, 
-    'I2C': i2c_init,
     }
 
 class DeviceFactory(object):
@@ -39,7 +28,6 @@ class DeviceFactory(object):
     def __init__(self, device_list):
         self.device_list = device_list
         self.class_helpers = class_helpers
-        self.io_helpers = io_helpers
 
     def build(self):
         def get(device, key):
@@ -51,8 +39,7 @@ class DeviceFactory(object):
         devices = {}
         for device in self.device_list:
             name = get(device, 'name')
-            type = get(device, 'type')
             config = get(device, 'config')
-            devices[name] = self.class_helpers[name](config, self.io_helpers[type])
+            devices[name] = self.class_helpers[name](config)
 
         return devices

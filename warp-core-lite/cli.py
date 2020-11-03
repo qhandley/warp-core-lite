@@ -16,9 +16,7 @@ _VERSION = '1.0.0'
 _DEFAULT_CONFIG_NAME = '../defconfig.json'
 
 devices = {}
-
 log = logging.getLogger(__name__)
-
 
 def parse_args():
     '''Parse command-line arguments.'''
@@ -52,7 +50,7 @@ def run_interactive(launch_id):
     subparsers = parser.add_subparsers(help='sub-command help', dest='cmd')
 
     read_parser = subparsers.add_parser('read', help='read from device')
-    read_parser.add_argument('device', choices=devices.keys(), help='Choose a device to read to')
+    read_parser.add_argument('device', choices=devices.keys(), help='Choose a device to read from')
     read_parser.add_argument('payload', nargs='?')
 
     write_parser = subparsers.add_parser('write', help='write to device')
@@ -83,13 +81,14 @@ def run_interactive(launch_id):
         except SystemExit:
             continue
 
-        try: 
-            if args.cmd in ['read', 'write']:
-                devices[args.device].access(args.cmd, args.payload)
+        try:
+            if args.cmd in ['read', 'r', 'write', 'w']:
+                ret = devices[args.device].access(args.cmd, args.payload)
+                print(ret)
             else:
                 args.func()
         except:
-            print('function does not exist')
+            print('Function does not exist')
 
     print('Ending session... goodbye!')
 
@@ -129,7 +128,6 @@ def run():
         pass
     else:
         run_interactive(launch_id)
-        pass
 
 
 if __name__ == "__main__":
