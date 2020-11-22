@@ -1,0 +1,8 @@
+* Complete porting of test launch sequence
+* Add i2c driver interface
+* Move global devices to separate module (e.g. config.py)
+* Add test parameters to config.json file (timeouts, etc.) 
+* Unify device interface with cli
+* Add logging
+* Create server (non-interactive) mode
+* Add docs (sphinx, mkdocs...)

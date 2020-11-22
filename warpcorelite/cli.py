@@ -13,7 +13,7 @@ from factory import DeviceFactory
 
 _BANNER = pyfiglet.figlet_format('Warp-Core Lite', font = 'slant') 
 _VERSION = '1.0.0'
-_DEFAULT_CONFIG_NAME = '../defconfig.json'
+_DEFAULT_CONFIG_NAME = './configs/default.json'
 
 devices = {}
 log = logging.getLogger(__name__)
@@ -64,7 +64,7 @@ def run_interactive(launch_id):
     launch_parser.set_defaults(func=commands.launch)
 
     session = PromptSession()
-    prompt = f"({launch_id})> "
+    prompt = f"{launch_id}#> "
 
     while True:
         try:
@@ -73,6 +73,7 @@ def run_interactive(launch_id):
             continue
         except EOFError:
             break
+
         if response == '' or response.isspace():
             continue
 
@@ -81,14 +82,11 @@ def run_interactive(launch_id):
         except SystemExit:
             continue
 
-        try:
-            if args.cmd in ['read', 'r', 'write', 'w']:
-                ret = devices[args.device].access(args.cmd, args.payload)
-                print(ret)
-            else:
-                args.func()
-        except:
-            print('Function does not exist')
+        if args.cmd in ('read', 'write'):
+            ret = devices[args.device].access(args.cmd, args.payload)
+            print(ret)
+        else:
+            args.func(devices)
 
     print('Ending session... goodbye!')
 
@@ -97,6 +95,7 @@ def run():
     '''Run program either in interactive mode (default) or as server.'''
 
     global devices
+    factory = DeviceFactory()
     args = parse_args()
 
     if args.disable_logging:
@@ -118,10 +117,9 @@ def run():
     with open(config_path) as f:
         config = json.load(f)
 
-    factory = DeviceFactory(config['DeviceList'])
-    devices = factory.build()
+    devices = factory.build(config['DeviceList'])
 
-    print(b.OK + 'Devices loaded.' + b.END)
+    print(b.OK + f'Successfully configured {len(devices)} devices.' + b.END)
 
     if args.port:
         # TODO

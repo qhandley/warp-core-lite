@@ -7,7 +7,7 @@
             "type": "DIN",
             "config": {
                 "pin": 21,
-                "pull_up": false
+                "pull_up": true
             }
         },
         {

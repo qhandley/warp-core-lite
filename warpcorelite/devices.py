@@ -2,17 +2,14 @@ from gpiozero import DigitalInputDevice, DigitalOutputDevice
 from smbus2 import SMBus
 
 enable_keywords = ('enable', 'on', '1', 'high')
-disable_keywords = ('disable', 'off', '0', 'off')
+disable_keywords = ('disable', 'off', '0', 'low')
 
 class DigitalOutputDriver(object):
     def __init__(self, config):
-        self.core = self.dout_init(config)
-
-    def dout_init(self, config):
         pin = config['pin']
         active_high = config['active_high']
         initial_value = config['initial_value']
-        return DigitalOutputDevice(pin, active_high, initial_value)
+        self.core = DigitalOutputDevice(pin, active_high, initial_value)
 
     def access(self, command, payload=None):
         if command == 'read':
@@ -38,12 +35,9 @@ class DigitalOutputDriver(object):
 
 class DigitalInputDriver(object):
     def __init__(self, config):
-        self.core = self.din_init(config)
-
-    def din_init(self, config):
         pin = config['pin']
         pull_up = config['pull_up']
-        return DigitalInputDevice(pin, pull_up)
+        self.core = DigitalInputDevice(pin, pull_up)
 
     def access(self, command, payload=None):
         if command == 'read':
@@ -60,19 +54,20 @@ class DigitalInputDriver(object):
 
 class I2CDriver(object):
     def __init__(self, config):
-        self.core = self.i2c_init(config)
-
-    def i2c_init(self, config):
         channel = config['channel']
-        return SMBus(channel)
+        self.addr = config['address']
+        self.core = SMBus(channel)
 
     def access(self, command, payload=None):
+        #TODO
         pass
 
     def _read(self):
+        #TODO
         pass 
 
     def _write(self, value=None):
+        #TODO
         pass
 
     def __repr__(self):
@@ -80,22 +75,35 @@ class I2CDriver(object):
 
 
 class BurnWire(DigitalInputDriver):
-    pass
+    def __init__(self, config, id, info):
+        self.id = id
+        self.info = info
+        super().__init__(config)
 
 
 class Igniter(DigitalOutputDriver):
-    pass
+    def __init__(self, config, id, info):
+        self.id = id
+        self.info = info
+        super().__init__(config)
 
 
 class DelugePump(DigitalOutputDriver):
-    pass
+    def __init__(self, config, id, info):
+        self.id = id
+        self.info = info
+        super().__init__(config)
 
 
 class MainOxValve(DigitalOutputDriver):
-    pass
+    def __init__(self, config, id, info):
+        self.id = id
+        self.info = info
+        super().__init__(config)
 
 
 class MotorPressure(I2CDriver):
-    def __init__(self, config):
-        self.addr = config['address']
+    def __init__(self, config, id, info):
+        self.id = id
+        self.info = info
         super().__init__(config)
